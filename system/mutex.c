@@ -6,9 +6,12 @@
  */
 void mutex_lock(mutex_t *lock)
 {
-	//TODO - write a busy-wait loop using test_and_set
-}
+	// TODO - write a busy-wait loop using test_and_set
+	while (test_and_set(lock))
+		;
 
+	// lock = TRUE;
+}
 
 /**
  * Leave a critical section guarded by lock
@@ -16,5 +19,6 @@ void mutex_lock(mutex_t *lock)
  */
 void mutex_unlock(mutex_t *lock)
 {
-	//TODO - unlock!
+	// TODO - unlock!
+	*lock = FALSE;
 }

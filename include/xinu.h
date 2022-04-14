@@ -18,4 +18,5 @@
 #include <prototypes.h>
 #include <i386.h>
 #include <pci.h>
+#include <clock.h>
 //#include <clock.h>

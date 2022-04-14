@@ -8,7 +8,7 @@
 
 // TODO - locks must be declared and initialized here
 mutex_t forks[N];
-
+mutex_t mutex;
 /**
  * Delay for a random amount of time
  * @param alpha delay factor
@@ -42,15 +42,37 @@ void think()
  */
 void philosopher(uint32 phil_id)
 {
-	uint32 right = forks[(phil_id + 1) % N];			// TODO - right fork
-	uint32 left = forks[phil_id]; // TODO - left fork
-
+	uint32 right = forks[(phil_id + 1) % N]; // TODO - right fork
+	uint32 left = forks[phil_id];			 // TODO - left fork
+	mutex_t left_fork = forks[left];
+	mutex_t right_fork = forks[right];
 	while (TRUE)
 	{
-		
-		// TODO
-		// think 70% of the time
-		// eat 30% of the time
+		mutex_lock(&mutex);
+		srand(phil_id);
+		int r = rand() % 10;
+		if (r > 3)
+		{ // think
+			kprintf("Philosopher %d thinking: zzzZZZzzz\n", phil_id);
+			think();
+		}
+		else if (r < 3)
+		{
+			if (right_fork == FALSE && left_fork == FALSE)
+			{
+				mutex_lock(&right_fork);
+				mutex_lock(&left_fork);
+				kprintf("Philosopher %d eating: nom nom nom\n", phil_id);
+				eat();
+				mutex_unlock(&right_fork);
+				mutex_unlock(&left_fork);
+			}
+			else
+			{
+				break;
+			}
+		}
+		mutex_unlock(&mutex);
 	}
 }
 

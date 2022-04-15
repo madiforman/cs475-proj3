@@ -45,7 +45,7 @@ void think()
  */
 void philosopher(uint32 phil_id)
 {
-    //find the index for right and left forks
+    // find the index for right and left forks
     uint32 right = (phil_id + 1) % N; // TODO - right fork
     uint32 left = phil_id;            // TODO - left fork
     // initiate a lock for both left and right fork
@@ -56,29 +56,30 @@ void philosopher(uint32 phil_id)
     while (TRUE)
     {
         if ((rand() % 10) >= 3)
-        { // think 70% chance
-            //lock up the print statement
+        {
+            // think 70% chance
+            // lock up the print statement
             mutex_lock(&mutex);
             kprintf("Philosopher %d thinking: zzzZZZzzz\n", phil_id);
             mutex_unlock(&mutex);
-            //call think()
+            // call think()
             think();
         }
         else
-        {// eat 30% of the time
-            //eat when both the right fork and the left fork are available
+        {
+            // eat when both the right fork and the left fork are available
             if (right_fork == FALSE && left_fork == FALSE)
             {
-                //lock up both forks
+                // lock up both forks
                 mutex_lock(&right_fork);
                 mutex_lock(&left_fork);
-                //lock up the print statement
+                // lock up the print statement
                 mutex_lock(&mutex);
                 kprintf("Philosopher %d eating: nom nom nom\n", phil_id);
                 mutex_unlock(&mutex);
-                //call to eat()
+                // call to eat()
                 eat();
-                //unlock the forks
+                // unlock the forks
                 mutex_unlock(&left_fork);
                 mutex_unlock(&right_fork);
             }
